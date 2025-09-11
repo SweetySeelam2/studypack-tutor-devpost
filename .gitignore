@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Streamlit
+.streamlit/
+
+# VSCode / IDE
+.vscode/
+.idea/
+
+# Data & local packs (optional; include only samples)
+study_packs/*
+!study_packs/README.md
+!study_packs/Samples/**
+
+video-demo.txt
