@@ -1,17 +1,19 @@
 # StudyPack Tutor — Offline Classroom Copilot
 
-**Tagline:** A private, offline tutor that answers **only** from your study packs and generates lessons, quizzes, and auto-grades—no internet required.
+A private, offline tutor that answers **only** from your study packs and generates lessons, quizzes, and auto-grades—no internet required.
 
 ---
 
 ## Elevator Pitch
 A private, offline tutor that answers **only** from your study packs and generates lessons, quizzes, and auto-grades—no internet required.
 
+---
+
 ## Category Selection
 - **Best Local Agent (primary):** The whole agentic loop (retrieve → plan → answer/quiz/grade) runs locally via Ollama + TF-IDF RAG, with zero network calls.
 - **For Humanity (secondary):** Designed for low-connectivity and high-privacy schools; bilingual and grade-level controls expand access.
 
---
+---
 
 ## What it does 
 StudyPack Tutor indexes teacher-provided `.pdf/.txt/.md` into “Study Packs.” The Tutor Chat answers questions grounded in those packs (or uses general knowledge if none is selected). The Lesson Generator outputs practical plans (objectives, hook, steps, differentiation, exit ticket). The Quiz + Auto-Grader creates short assessments, collects answers, and grades with concise feedback.
@@ -47,7 +49,17 @@ Many classrooms have poor connectivity and strict privacy needs. StudyPack Tutor
 
 ---
 
-## Quick Start
+## Quick Start - Testing Instructions
+
+**0) Requirements**
+
+Python 3.9–3.12
+
+pip (or uv/pipx)
+
+Ollama (local LLM runtime)
+
+Git (optional, for cloning)
 
 **1) Prereqs**
 
@@ -78,6 +90,10 @@ study_packs/
     osmosis.txt
   Astronomy/
     full_moons_2025.txt
+  Samples/
+    math_multiples_of_5.md         # tiny math facts + 3-item quiz context
+    bio_cell_organelles.txt        # short organelles notes
+    english_figures_of_speech.md   # simile vs metaphor mini-cheatsheet
 
 **5) Run**
 
@@ -99,6 +115,74 @@ Visit: http://localhost:8501
 
 *Tip: If added new files, restart app.py to reindex.*
 
+**6) Quick “Happy-Path” verification** (≤ 3 minutes)**
+
+**Sidebar** → Study Pack (RAG): it should auto-select Samples.
+
+**Tutor Chat tab** → Preset dropdown: choose any preset and click Ask preset.
+
+Expected: a short, well-formatted Markdown answer (bullets, headings).
+
+**Lesson Generator tab:**
+
+Topic: Cell organelles → Generate
+
+Expected: a compact plan with sections (Objectives, Hook, Steps, Practice, Exit Ticket).
+
+**Quiz + Auto-Grader tab:**
+
+Topic: Multiples of 5 (Grade 6); Questions: 3 → Generate
+
+Answer the items (one radio or short text per question) → Grade
+
+Expected: a score out of 3, per-question correctness, brief explanations, and a feedback summary.
+
+If any tab feels slow, slide Max answer tokens down (250–450) and toggle off Bilingual mode in the sidebar.
+
+**7) Health & API smoke tests**
+
+Health
+```
+curl http://127.0.0.1:5000/health
+```
+# {"status":"ok","packs":["Samples", ...],"model":"gpt-oss:20b"}
+
+**List packs**
+```
+curl http://127.0.0.1:5000/packs
+```
+# {"packs":["Samples", ...]}
+
+**Ask (non-stream)**
+```
+curl -X POST http://127.0.0.1:5000/ask \
+  -H "Content-Type: application/json" \
+  -d '{"question":"What is a metaphor? Give two examples.",
+       "pack":"Samples","reading_level":"6",
+       "bilingual_lang":"English","max_tokens":300}'
+```
+
+**Generate quiz (strict JSON response)**
+```
+curl -X POST http://127.0.0.1:5000/generate_quiz \
+  -H "Content-Type: application/json" \
+  -d '{"topic":"Multiples of 5 (Grade 6)","count":3,
+       "pack":"Samples","reading_level":"6","bilingual_lang":"English",
+       "max_tokens":450}'
+```
+
+**Grade quiz**
+
+Use the previous response as quiz_json and craft answers:
+```
+curl -X POST http://127.0.0.1:5000/grade_quiz \
+  -H "Content-Type: application/json" \
+  -d '{
+    "quiz_json": { ... the JSON you got from /generate_quiz ... },
+    "student_answers": {"1":"Yes","2":"No","3":"Yes"},
+    "pack":"Samples","reading_level":"6","bilingual_lang":"English","max_tokens":500
+  }'
+  ```
 ---
 
 ## Environment Variables (optional)
@@ -146,8 +230,8 @@ Visit: http://localhost:8501
 
 ## Project Links
 
-- Github Repo:
-- Video Demo: 
+- Github Repo:https://github.com/SweetySeelam2/studypack-tutor-devpost
+- Video Demo: https://www.facebook.com/share/p/1CRKCRQwPT/
 
 ---
 
