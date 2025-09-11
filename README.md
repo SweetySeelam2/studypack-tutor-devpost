@@ -145,13 +145,13 @@ Health
 ```
 curl http://127.0.0.1:5000/health
 ```
-# {"status":"ok","packs":["Samples", ...],"model":"gpt-oss:20b"}
+{"status":"ok","packs":["Samples", ...],"model":"gpt-oss:20b"}
 
 **List packs**
 ```
 curl http://127.0.0.1:5000/packs
 ```
-# {"packs":["Samples", ...]}
+{"packs":["Samples", ...]}
 
 **Ask (non-stream)**
 ```
