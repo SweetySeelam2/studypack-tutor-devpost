@@ -11,22 +11,31 @@ A private, offline tutor that answers **only** from your study packs and generat
 
 ## Category Selection
 - **Best Local Agent (primary):** The whole agentic loop (retrieve → plan → answer/quiz/grade) runs locally via Ollama + TF-IDF RAG, with zero network calls.
+
 - **For Humanity (secondary):** Designed for low-connectivity and high-privacy schools; bilingual and grade-level controls expand access.
 
 ---
 
 ## What it does 
-StudyPack Tutor indexes teacher-provided `.pdf/.txt/.md` into “Study Packs.” The Tutor Chat answers questions grounded in those packs (or uses general knowledge if none is selected). The Lesson Generator outputs practical plans (objectives, hook, steps, differentiation, exit ticket). The Quiz + Auto-Grader creates short assessments, collects answers, and grades with concise feedback.
+StudyPack Tutor indexes teacher-provided `.pdf/.txt/.md` into “Study Packs.” The Tutor Chat answers questions grounded in those packs (or uses general knowledge if none is selected). 
+
+The Lesson Generator outputs practical plans (objectives, hook, steps, differentiation, exit ticket). 
+
+The Quiz + Auto-Grader creates short assessments, collects answers, and grades with concise feedback.
 
 ---
 
 ## How it works 
-A Streamlit UI drives a Flask backend. Uploaded materials are chunked and embedded by a lightweight TF-IDF vectorizer; the top-K chunks condition the local LLM (`gpt-oss:20b` via Ollama). Responses are formatted to clean Markdown for classroom-ready output. A simple safety filter removes inappropriate queries.
+A Streamlit UI drives a Flask backend. Uploaded materials are chunked and embedded by a lightweight TF-IDF vectorizer; the top-K chunks condition the local LLM (`gpt-oss:20b` via Ollama). 
+
+Responses are formatted to clean Markdown for classroom-ready output. A simple safety filter removes inappropriate queries.
 
 ---
 
 ## Why it matters
-Many classrooms have poor connectivity and strict privacy needs. StudyPack Tutor runs entirely on a local machine, grounds every answer in the files, and never sends data to the cloud. It gives teachers a reliable, private copilot that works without internet, respects student data, and stays within the curriculum by grounding answers in the teacher’s own materials.
+Many classrooms have poor connectivity and strict privacy needs. StudyPack Tutor runs entirely on a local machine, grounds every answer in the files, and never sends data to the cloud. 
+
+It gives teachers a reliable, private copilot that works without internet, respects student data, and stays within the curriculum by grounding answers in the teacher’s own materials.
 
 ---
 
@@ -61,10 +70,12 @@ Ollama (local LLM runtime)
 
 Git (optional, for cloning)
 
+
 **1) Prereqs**
 
 - Python 3.10+  
 - [Ollama](https://ollama.com/) installed and running
+
 
 **2) Install deps**
 
@@ -72,6 +83,7 @@ Git (optional, for cloning)
 
 pip install -r requirements.txt
 ```
+
 
 **3) Pull the model and start Ollama**
 
@@ -81,19 +93,21 @@ ollama pull gpt-oss:20b
 ollama serve
 ```
 
+
 **4) Prepare study packs**
 
-study_packs/
-  Mathematics/
-    fractions.md
-  Biology/
-    osmosis.txt
-  Astronomy/
-    full_moons_2025.txt
-  Samples/
-    math_multiples_of_5.md         # tiny math facts + 3-item quiz context
-    bio_cell_organelles.txt        # short organelles notes
-    english_figures_of_speech.md   # simile vs metaphor mini-cheatsheet
+study_packs/                                                          
+  Mathematics/                                                              
+    fractions.md                                                         
+  Biology/                                                             
+    osmosis.txt                                            
+  Astronomy/                                                     
+    full_moons_2025.txt                                                       
+  Samples/                                                                            
+    math_multiples_of_5.md         # tiny math facts + 3-item quiz context                            
+    bio_cell_organelles.txt        # short organelles notes                                   
+    english_figures_of_speech.md   # simile vs metaphor mini-cheatsheet                                              
+
 
 **5) Run**
 
@@ -114,6 +128,8 @@ streamlit run ui.py
 Visit: http://localhost:8501
 
 *Tip: If added new files, restart app.py to reindex.*
+
+
 
 **6) Quick “Happy-Path” verification** (≤ 3 minutes)**
 
@@ -138,6 +154,8 @@ Answer the items (one radio or short text per question) → Grade
 Expected: a score out of 3, per-question correctness, brief explanations, and a feedback summary.
 
 If any tab feels slow, slide Max answer tokens down (250–450) and toggle off Bilingual mode in the sidebar.
+
+
 
 **7) Health & API smoke tests**
 
@@ -237,5 +255,5 @@ curl -X POST http://127.0.0.1:5000/grade_quiz \
 
 ## License
 
-
 **MIT © 2025 Sweety Seelam**
+
