@@ -1,4 +1,4 @@
-# StudyPack Tutor — Offline Classroom Copilot
+# StudyPack Tutor - Offline Classroom Copilot
 
 A private, offline tutor that answers **only** from your study packs and generates lessons, quizzes, and auto-grades—no internet required.
 
@@ -236,5 +236,6 @@ curl -X POST http://127.0.0.1:5000/grade_quiz \
 ---
 
 ## License
+
 
 **MIT © 2025 Sweety Seelam**
